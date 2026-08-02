@@ -388,9 +388,21 @@ header {
 }
 
 .nav-dot.answered {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.nav-dot.correct {
   background: var(--success);
   color: #fff;
   border-color: var(--success);
+}
+
+.nav-dot.incorrect {
+  background: var(--error);
+  color: #fff;
+  border-color: var(--error);
 }
 
 .nav-dot.current {
@@ -526,6 +538,18 @@ header {
   background: rgba(99, 102, 241, 0.15);
   border-color: var(--primary);
   color: #fff;
+}
+
+.option-label.correct {
+  background: rgba(16, 185, 129, 0.15) !important;
+  border-color: var(--success) !important;
+  color: #fff !important;
+}
+
+.option-label.incorrect {
+  background: rgba(239, 68, 68, 0.15) !important;
+  border-color: var(--error) !important;
+  color: #fff !important;
 }
 
 /* Matching Grid (Reading Teil 1 & Teil 3, Language Teil 2) */

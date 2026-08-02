@@ -34,7 +34,18 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
   extract("Hörverstehen");
 
   const answers = {};
+  const lockedQuestions = {};
   let currentIdx = 0, isPlayingAudio = false;
+
+  const lockCurrentQuestion = () => {
+    if (flatQuestions.length === 0) return;
+    const q = flatQuestions[currentIdx];
+    if (answers[q.displayId] !== undefined && lockedQuestions[q.displayId] === undefined) {
+      const userAns = answers[q.displayId];
+      const isCorrect = (userAns.toLowerCase() === q.correctAnswer.toLowerCase());
+      lockedQuestions[q.displayId] = isCorrect ? 'correct' : 'incorrect';
+    }
+  };
 
   const init = () => {
     timerInterval = setInterval(() => {
@@ -125,8 +136,10 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
   };
 
   const renderQuestion = (idx) => {
+    lockCurrentQuestion();
     currentIdx = idx;
     const q = flatQuestions[idx];
+    const isLocked = lockedQuestions[q.displayId] !== undefined;
     const pane = document.getElementById("quiz-pane");
     if (!pane) return;
     if (window.speechSynthesis) { window.speechSynthesis.cancel(); isPlayingAudio = false; }
@@ -134,7 +147,17 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
     document.querySelectorAll(".nav-dot").forEach((dot, dotIdx) => {
       dot.classList.remove("current");
       if (dotIdx === idx) dot.classList.add("current");
-      dot.classList.toggle("answered", answers[flatQuestions[dotIdx].displayId] !== undefined);
+      
+      const qId = flatQuestions[dotIdx].displayId;
+      if (lockedQuestions[qId] !== undefined) {
+        dot.classList.remove("answered");
+        dot.classList.toggle("correct", lockedQuestions[qId] === 'correct');
+        dot.classList.toggle("incorrect", lockedQuestions[qId] === 'incorrect');
+      } else {
+        dot.classList.toggle("answered", answers[qId] !== undefined);
+        dot.classList.remove("correct");
+        dot.classList.remove("incorrect");
+      }
     });
 
     let head = `
@@ -160,12 +183,22 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
             <div class="question-item active">
               <div class="question-title">${qLabel}: ${q.questionText || "Tragen Sie die richtige Lücke ein."}</div>
               <div class="options-list">
-                ${q.options.map(opt => `
-                  <label class="option-label ${answers[q.displayId] === opt.id ? 'selected' : ''}">
-                    <input type="radio" name="q-${q.displayId}" value="${opt.id}" ${answers[q.displayId] === opt.id ? 'checked' : ''}>
-                    <strong>${opt.id}</strong>. ${opt.text}
-                  </label>
-                `).join('')}
+                ${q.options.map(opt => {
+                  const isSelected = answers[q.displayId] === opt.id;
+                  let labelClass = "option-label";
+                  if (isSelected) {
+                    labelClass += " selected";
+                    if (isLocked) {
+                      labelClass += lockedQuestions[q.displayId] === 'correct' ? " correct" : " incorrect";
+                    }
+                  }
+                  return `
+                    <label class="${labelClass}">
+                      <input type="radio" name="q-${q.displayId}" value="${opt.id}" ${answers[q.displayId] === opt.id ? 'checked' : ''} ${isLocked ? 'disabled' : ''}>
+                      <strong>${opt.id}</strong>. ${opt.text}
+                    </label>
+                  `;
+                }).join('')}
               </div>
             </div>
           </div>
@@ -188,12 +221,22 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
         <div class="question-item active">
           <div class="question-title">${qLabel}: ${q.speaker ? `<strong>${q.speaker}</strong>: ` : ''} ${q.situationText || q.questionText}</div>
           <div class="options-list">
-            ${q.options.map(opt => `
-              <label class="option-label ${answers[q.displayId] === opt.id ? 'selected' : ''}">
-                <input type="radio" name="q-${q.displayId}" value="${opt.id}" ${answers[q.displayId] === opt.id ? 'checked' : ''}>
-                <strong>${opt.id}</strong>. ${opt.text}
-              </label>
-            `).join('')}
+            ${q.options.map(opt => {
+              const isSelected = answers[q.displayId] === opt.id;
+              let labelClass = "option-label";
+              if (isSelected) {
+                labelClass += " selected";
+                if (isLocked) {
+                  labelClass += lockedQuestions[q.displayId] === 'correct' ? " correct" : " incorrect";
+                }
+              }
+              return `
+                <label class="${labelClass}">
+                  <input type="radio" name="q-${q.displayId}" value="${opt.id}" ${answers[q.displayId] === opt.id ? 'checked' : ''} ${isLocked ? 'disabled' : ''}>
+                  <strong>${opt.id}</strong>. ${opt.text}
+                </label>
+              `;
+            }).join('')}
           </div>
         </div>
       `;
@@ -213,18 +256,27 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
             <div class="matching-buttons-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
               ${q.options.map(opt => {
                 const isSelected = answers[q.displayId] === opt.id;
+                let btnBg = isSelected ? 'rgba(99, 102, 241, 0.15)' : 'rgba(15, 23, 42, 0.4)';
+                let btnBorder = isSelected ? 'var(--primary)' : 'var(--glass-border)';
+                if (isSelected && isLocked) {
+                  const isCorrect = lockedQuestions[q.displayId] === 'correct';
+                  btnBg = isCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)';
+                  btnBorder = isCorrect ? 'var(--success)' : 'var(--error)';
+                }
                 return `
                   <button class="matching-opt-btn ${isSelected ? 'selected' : ''}" 
                           data-value="${opt.id}" 
-                          style="text-align: left; width: 100%; padding: 1.1rem; border-radius: var(--border-radius); background: ${isSelected ? 'rgba(99, 102, 241, 0.15)' : 'rgba(15, 23, 42, 0.4)'}; border: 1px solid ${isSelected ? 'var(--primary)' : 'var(--glass-border)'}; color: var(--text-primary); cursor: pointer; transition: all 0.2s; font-family: inherit; font-size: 0.95rem;">
-                    <strong style="color: var(--primary); margin-right: 0.5rem;">${opt.id}:</strong> ${opt.text}
+                          ${isLocked ? 'disabled' : ''}
+                          style="text-align: left; width: 100%; padding: 1.1rem; border-radius: var(--border-radius); background: ${btnBg}; border: 1px solid ${btnBorder}; color: var(--text-primary); cursor: ${isLocked ? 'not-allowed' : 'pointer'}; transition: all 0.2s; font-family: inherit; font-size: 0.95rem;">
+                    <strong style="color: ${isSelected && isLocked ? (lockedQuestions[q.displayId] === 'correct' ? 'var(--success)' : 'var(--error)') : 'var(--primary)'}; margin-right: 0.5rem;">${opt.id}:</strong> ${opt.text}
                   </button>
                 `;
               }).join('')}
               
               <button class="matching-opt-btn ${answers[q.displayId] === undefined ? 'selected' : ''}" 
                       data-value="" 
-                      style="text-align: left; width: 100%; padding: 1.1rem; border-radius: var(--border-radius); background: ${answers[q.displayId] === undefined ? 'rgba(239, 68, 68, 0.1)' : 'rgba(15, 23, 42, 0.4)'}; border: 1px solid ${answers[q.displayId] === undefined ? 'var(--error)' : 'var(--glass-border)'}; color: var(--text-muted); cursor: pointer; transition: all 0.2s; font-family: inherit; font-size: 0.95rem;">
+                      ${isLocked ? 'disabled' : ''}
+                      style="text-align: left; width: 100%; padding: 1.1rem; border-radius: var(--border-radius); background: ${answers[q.displayId] === undefined ? 'rgba(239, 68, 68, 0.1)' : 'rgba(15, 23, 42, 0.4)'}; border: 1px solid ${answers[q.displayId] === undefined ? 'var(--error)' : 'var(--glass-border)'}; color: var(--text-muted); cursor: ${isLocked ? 'not-allowed' : 'pointer'}; transition: all 0.2s; font-family: inherit; font-size: 0.95rem;">
                 <strong>${i18n.t("no_selection")}</strong>
               </button>
             </div>
@@ -244,47 +296,49 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
     `;
     pane.innerHTML = head + body + nav;
 
-    pane.querySelectorAll(`input[name="q-${q.displayId}"]`).forEach(inp => {
-      inp.addEventListener("change", (e) => {
-        answers[q.displayId] = e.target.value;
-        pane.querySelectorAll(".option-label").forEach(l => l.classList.remove("selected"));
-        e.target.parentElement.classList.add("selected");
-        document.getElementById(`nav-dot-${idx}`).classList.add("answered");
-        updateAnsweredCounter();
-      });
-    });
-
-    pane.querySelectorAll(".matching-opt-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const val = btn.getAttribute("data-value");
-        if (val) {
-          answers[q.displayId] = val;
+    if (!isLocked) {
+      pane.querySelectorAll(`input[name="q-${q.displayId}"]`).forEach(inp => {
+        inp.addEventListener("change", (e) => {
+          answers[q.displayId] = e.target.value;
+          pane.querySelectorAll(".option-label").forEach(l => l.classList.remove("selected"));
+          e.target.parentElement.classList.add("selected");
           document.getElementById(`nav-dot-${idx}`).classList.add("answered");
-        } else {
-          delete answers[q.displayId];
-          document.getElementById(`nav-dot-${idx}`).classList.remove("answered");
-        }
-        
-        updateAnsweredCounter();
-        
-        // Update styling of buttons instantly
-        pane.querySelectorAll(".matching-opt-btn").forEach(b => {
-          const bVal = b.getAttribute("data-value");
-          const isSel = (bVal === val);
-          
-          if (bVal === "") {
-            // "No selection" button styles
-            b.style.background = isSel ? 'rgba(239, 68, 68, 0.1)' : 'rgba(15, 23, 42, 0.4)';
-            b.style.borderColor = isSel ? 'var(--error)' : 'var(--glass-border)';
-            b.style.color = isSel ? 'var(--error)' : 'var(--text-muted)';
-          } else {
-            // Normal option button styles
-            b.style.background = isSel ? 'rgba(99, 102, 241, 0.15)' : 'rgba(15, 23, 42, 0.4)';
-            b.style.borderColor = isSel ? 'var(--primary)' : 'var(--glass-border)';
-          }
+          updateAnsweredCounter();
         });
       });
-    });
+
+      pane.querySelectorAll(".matching-opt-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const val = btn.getAttribute("data-value");
+          if (val) {
+            answers[q.displayId] = val;
+            document.getElementById(`nav-dot-${idx}`).classList.add("answered");
+          } else {
+            delete answers[q.displayId];
+            document.getElementById(`nav-dot-${idx}`).classList.remove("answered");
+          }
+          
+          updateAnsweredCounter();
+          
+          // Update styling of buttons instantly
+          pane.querySelectorAll(".matching-opt-btn").forEach(b => {
+            const bVal = b.getAttribute("data-value");
+            const isSel = (bVal === val);
+            
+            if (bVal === "") {
+              // "No selection" button styles
+              b.style.background = isSel ? 'rgba(239, 68, 68, 0.1)' : 'rgba(15, 23, 42, 0.4)';
+              b.style.borderColor = isSel ? 'var(--error)' : 'var(--glass-border)';
+              b.style.color = isSel ? 'var(--error)' : 'var(--text-muted)';
+            } else {
+              // Normal option button styles
+              b.style.background = isSel ? 'rgba(99, 102, 241, 0.15)' : 'rgba(15, 23, 42, 0.4)';
+              b.style.borderColor = isSel ? 'var(--primary)' : 'var(--glass-border)';
+            }
+          });
+        });
+      });
+    }
 
 
     document.getElementById("prev-btn").addEventListener("click", () => renderQuestion(idx-1));
