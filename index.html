@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telc B2 Exam Trainer</title>
+  <meta name="description" content="Üben Sie für die Telc B2 Deutschprüfung mit unserem kostenlosen, interaktiven Test-Simulator.">
+  
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- App Styles -->
+  <link rel="stylesheet" href="src/index.css">
+</head>
+<body>
+  
+  <!-- App Mount Point -->
+  <div id="app" class="app-container"></div>
+
+  <!-- Translation Engine (Loads First) -->
+  <script src="src/db/i18n.js"></script>
+
+  <!-- Databases -->
+  <script src="src/db/reading.js"></script>
+  <script src="src/db/language.js"></script>
+  <script src="src/db/listening.js"></script>
+  <script src="src/db/questions.js"></script>
+  
+  <!-- UI Components -->
+  <script src="src/components/login.js"></script>
+  <script src="src/components/dashboard.js"></script>
+  <script src="src/components/testSimulator.js"></script>
+  
+  <!-- Main Coordinator -->
+  <script src="src/app.js"></script>
+</body>
+</html>
