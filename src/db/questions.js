@@ -98,6 +98,7 @@
     const renumberSection = (sectionParts) => {
       sectionParts.forEach(part => {
         if (part.items) {
+          part.items = shuffleArray(part.items);
           part.items.forEach(item => {
             const oldId = item.id;
             item.displayId = questionCounter++;
@@ -107,6 +108,7 @@
           });
         }
         if (part.questions) {
+          part.questions = shuffleArray(part.questions);
           part.questions.forEach(q => {
             const oldId = q.id;
             q.displayId = questionCounter++;
