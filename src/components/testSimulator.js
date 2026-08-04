@@ -35,15 +35,35 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
 
   const answers = {};
   const lockedQuestions = {};
+  const listeningStatus = {};
   let currentIdx = 0, isPlayingAudio = false;
 
   const lockCurrentQuestion = () => {
     if (flatQuestions.length === 0) return;
-    const q = flatQuestions[currentIdx];
-    if (answers[q.displayId] !== undefined && lockedQuestions[q.displayId] === undefined) {
-      const userAns = answers[q.displayId];
-      const isCorrect = (userAns.toLowerCase() === q.correctAnswer.toLowerCase());
-      lockedQuestions[q.displayId] = isCorrect ? 'correct' : 'incorrect';
+    const currentQ = flatQuestions[currentIdx];
+    
+    // Auto-complete playing status to finished if leaving
+    const partKey = `${currentQ.section}-${currentQ.part}`;
+    if (listeningStatus[partKey] && listeningStatus[partKey].status === "playing") {
+      listeningStatus[partKey].status = "finished";
+    }
+
+    if (currentQ.section === "Hörverstehen") {
+      const group = flatQuestions.filter(q => q.section === "Hörverstehen" && q.part === currentQ.part);
+      group.forEach(q => {
+        if (answers[q.displayId] !== undefined && lockedQuestions[q.displayId] === undefined) {
+          const userAns = answers[q.displayId];
+          const isCorrect = (userAns.toLowerCase() === q.correctAnswer.toLowerCase());
+          lockedQuestions[q.displayId] = isCorrect ? 'correct' : 'incorrect';
+        }
+      });
+    } else {
+      const q = currentQ;
+      if (answers[q.displayId] !== undefined && lockedQuestions[q.displayId] === undefined) {
+        const userAns = answers[q.displayId];
+        const isCorrect = (userAns.toLowerCase() === q.correctAnswer.toLowerCase());
+        lockedQuestions[q.displayId] = isCorrect ? 'correct' : 'incorrect';
+      }
     }
   };
 
@@ -60,6 +80,11 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
 
   const cleanup = () => {
     clearInterval(timerInterval);
+    Object.keys(listeningStatus).forEach(key => {
+      if (listeningStatus[key].interval) {
+        clearInterval(listeningStatus[key].interval);
+      }
+    });
     if (window.speechSynthesis) window.speechSynthesis.cancel();
   };
 
@@ -130,13 +155,24 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
       if (confirm(i18n.t("confirm_submit"))) submit();
     });
     document.querySelectorAll(".nav-dot").forEach((dot, idx) => {
-      dot.addEventListener("click", () => renderQuestion(idx));
+      dot.addEventListener("click", () => {
+        let targetIdx = idx;
+        const q = flatQuestions[targetIdx];
+        if (q.section === "Hörverstehen") {
+          while (targetIdx > 0 && flatQuestions[targetIdx - 1].section === "Hörverstehen" && flatQuestions[targetIdx - 1].part === q.part) {
+            targetIdx--;
+          }
+        }
+        renderQuestion(targetIdx);
+      });
     });
     updateTimerUI();
   };
 
   const renderQuestion = (idx) => {
-    lockCurrentQuestion();
+    if (currentIdx !== idx) {
+      lockCurrentQuestion();
+    }
     currentIdx = idx;
     const q = flatQuestions[idx];
     const isLocked = lockedQuestions[q.displayId] !== undefined;
@@ -145,10 +181,11 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
     if (window.speechSynthesis) { window.speechSynthesis.cancel(); isPlayingAudio = false; }
 
     document.querySelectorAll(".nav-dot").forEach((dot, dotIdx) => {
-      dot.classList.remove("current");
-      if (dotIdx === idx) dot.classList.add("current");
+      const dotQ = flatQuestions[dotIdx];
+      const isCurrentGroup = (dotQ.section === q.section && dotQ.part === q.part && q.section === "Hörverstehen") || (dotIdx === idx);
+      dot.classList.toggle("current", isCurrentGroup);
       
-      const qId = flatQuestions[dotIdx].displayId;
+      const qId = dotQ.displayId;
       if (lockedQuestions[qId] !== undefined) {
         dot.classList.remove("answered");
         dot.classList.toggle("correct", lockedQuestions[qId] === 'correct');
@@ -160,6 +197,17 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
       }
     });
 
+    const partQuestions = flatQuestions.filter(item => item.section === q.section && item.part === q.part);
+    let dynamicDescription = q.description || "";
+    if (partQuestions.length > 0) {
+      const minId = partQuestions[0].displayId;
+      const maxId = partQuestions[partQuestions.length - 1].displayId;
+      dynamicDescription = dynamicDescription
+        .replace(/\(\d+-\d+\)/g, `(${minId}-${maxId})`)
+        .replace(/\b\d+-\d+\b/g, `${minId}-${maxId}`)
+        .replace(/\d+\s*bis\s*\d+/g, `${minId} bis ${maxId}`);
+    }
+
     let head = `
       <div class="test-section-header">
         <span style="font-size:0.85rem;font-weight:700;color:var(--primary);text-transform:uppercase;">
@@ -168,7 +216,7 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
         <h2>${q.title}</h2>
       </div>
       <div class="test-section-description">
-        ${q.description}
+        ${dynamicDescription}
       </div>
     `;
     let body = "";
@@ -205,41 +253,166 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
         </div>
       `;
     } else if (q.section === "Hörverstehen") {
-      body = `
-        <div class="audio-player-card">
-          <div style="font-weight:600;color:#fff;">${q.topic || i18n.t("audio_text")}</div>
-          <p style="font-size: 0.85rem;">${i18n.t("audio_info")}</p>
-          <div class="audio-controls">
-            <button class="audio-play-btn" id="audio-play-trigger">
-              <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-            </button>
-            <div class="audio-progress-bar"><div class="audio-progress-fill" id="audio-progress"></div></div>
+      const group = flatQuestions.filter(item => item.section === "Hörverstehen" && item.part === q.part);
+      const partKey = `${q.section}-${q.part}`;
+      
+      if (!listeningStatus[partKey]) {
+        listeningStatus[partKey] = {
+          status: "countdown",
+          secondsLeft: q.part === "Teil 2" ? 60 : 30,
+          interval: null
+        };
+      }
+
+      let combinedScript = "";
+      if (q.part === "Teil 2") {
+        combinedScript = q.audioScript;
+      } else {
+        combinedScript = group.map(item => `${item.speaker ? `${item.speaker}: ` : ""}${item.audioScript || item.situationText}`).join("\n\n");
+      }
+
+      const startListeningAudio = () => {
+        listeningStatus[partKey].status = "playing";
+        renderQuestion(idx);
+        
+        if (window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(combinedScript);
+          utterance.lang = "de-DE";
+          const voices = window.speechSynthesis.getVoices();
+          const deVoice = voices.find(v => v.lang.startsWith("de") && v.name.includes("Google")) || voices.find(v => v.lang.startsWith("de"));
+          if (deVoice) utterance.voice = deVoice;
+
+          utterance.onend = () => {
+            listeningStatus[partKey].status = "finished";
+            renderQuestion(idx);
+          };
+          window.speechSynthesis.speak(utterance);
+        }
+      };
+
+      let audioCardHtml = "";
+      const statusObj = listeningStatus[partKey];
+      if (statusObj.status === "countdown") {
+        audioCardHtml = `
+          <div class="audio-player-card" style="margin-bottom: 2rem;">
+            <div style="font-weight:600;color:#fff;">${q.topic || i18n.t("audio_text")}</div>
+            <p style="font-size: 1.1rem; font-weight: 600; color: var(--primary); margin: 1rem 0;">
+              ${i18n.t("reading_pause") || "Lesepause"}: <span id="listening-countdown-text">${statusObj.secondsLeft}s</span>
+            </p>
+            <div class="audio-progress-bar"><div class="audio-progress-fill" id="audio-progress" style="width:0%;"></div></div>
           </div>
-          <button class="audio-transcript-toggle" id="transcript-toggle">${i18n.t("show_script")}</button>
-          <div class="audio-transcript-pane" id="transcript-pane" style="display:none;"><em>${q.audioScript || i18n.t("no_script")}</em></div>
-        </div>
-        <div class="question-item active">
-          <div class="question-title">${qLabel}: ${q.speaker ? `<strong>${q.speaker}</strong>: ` : ''} ${q.situationText || q.questionText}</div>
-          <div class="options-list">
-            ${q.options.map(opt => {
-              const isSelected = answers[q.displayId] === opt.id;
-              let labelClass = "option-label";
-              if (isSelected) {
-                labelClass += " selected";
-                if (isLocked) {
-                  labelClass += lockedQuestions[q.displayId] === 'correct' ? " correct" : " incorrect";
-                }
-              }
+        `;
+        if (!statusObj.interval) {
+          statusObj.interval = setInterval(() => {
+            statusObj.secondsLeft--;
+            const cdSpan = document.getElementById("listening-countdown-text");
+            if (cdSpan) cdSpan.innerText = `${statusObj.secondsLeft}s`;
+            if (statusObj.secondsLeft <= 0) {
+              clearInterval(statusObj.interval);
+              statusObj.interval = null;
+              startListeningAudio();
+            }
+          }, 1000);
+        }
+      } else if (statusObj.status === "playing") {
+        audioCardHtml = `
+          <div class="audio-player-card" style="margin-bottom: 2rem;">
+            <div style="font-weight:600;color:#fff;">${q.topic || i18n.t("audio_text")}</div>
+            <p style="font-size: 1rem; color: var(--success); margin: 1rem 0; font-weight: 600;">
+              🔊 ${i18n.t("audio_playing") || "Audio wird abgespielt..."} (Einmalig)
+            </p>
+            <div class="audio-progress-bar"><div class="audio-progress-fill" id="audio-progress" style="width:50%; background: var(--success);"></div></div>
+          </div>
+        `;
+      } else {
+        audioCardHtml = `
+          <div class="audio-player-card" style="margin-bottom: 2rem;">
+            <div style="font-weight:600;color:#fff;">${q.topic || i18n.t("audio_text")}</div>
+            <p style="font-size: 1rem; color: var(--text-secondary); margin: 1rem 0;">
+              🔇 ${i18n.t("audio_finished") || "Audio beendet."}
+            </p>
+            <div class="audio-progress-bar"><div class="audio-progress-fill" id="audio-progress" style="width:100%; background: var(--text-secondary);"></div></div>
+          </div>
+        `;
+      }
+
+      const groupBody = `
+        <div class="listening-group-container" style="display:flex; flex-direction:column; gap:1.25rem; margin-top:1.5rem;">
+          ${group.map((item) => {
+            const isItemLocked = lockedQuestions[item.displayId] !== undefined;
+            const isSelectedRichtig = answers[item.displayId] === "Richtig";
+            const isSelectedFalsch = answers[item.displayId] === "Falsch";
+            
+            let btnRichtigBg = isSelectedRichtig ? 'rgba(99, 102, 241, 0.15)' : 'rgba(15, 23, 42, 0.4)';
+            let btnRichtigBorder = isSelectedRichtig ? 'var(--primary)' : 'var(--glass-border)';
+            let btnFalschBg = isSelectedFalsch ? 'rgba(99, 102, 241, 0.15)' : 'rgba(15, 23, 42, 0.4)';
+            let btnFalschBorder = isSelectedFalsch ? 'var(--primary)' : 'var(--glass-border)';
+            
+            if (isSelectedRichtig && isItemLocked) {
+              const isCorrect = lockedQuestions[item.displayId] === 'correct';
+              btnRichtigBg = isCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)';
+              btnRichtigBorder = isCorrect ? 'var(--success)' : 'var(--error)';
+            }
+            if (isSelectedFalsch && isItemLocked) {
+              const isCorrect = lockedQuestions[item.displayId] === 'correct';
+              btnFalschBg = isCorrect ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)';
+              btnFalschBorder = isCorrect ? 'var(--success)' : 'var(--error)';
+            }
+
+            const isMultipleChoice = item.options.length > 2 || item.options[0].id !== "Richtig";
+            
+            if (isMultipleChoice) {
               return `
-                <label class="${labelClass}">
-                  <input type="radio" name="q-${q.displayId}" value="${opt.id}" ${answers[q.displayId] === opt.id ? 'checked' : ''} ${isLocked ? 'disabled' : ''}>
-                  <strong>${opt.id}</strong>. ${opt.text}
-                </label>
+                <div class="question-item active" style="padding: 1.25rem; border: 1px solid var(--glass-border); border-radius: var(--border-radius); background: rgba(15,23,42,0.2);">
+                  <div class="question-title" style="font-size: 0.95rem; font-weight: 600;">
+                    Aufgabe ${item.displayId}: ${item.situationText || item.questionText}
+                  </div>
+                  <div class="options-list" style="margin-top: 0.75rem;">
+                    ${item.options.map(opt => {
+                      const isSelected = answers[item.displayId] === opt.id;
+                      let labelClass = "option-label";
+                      if (isSelected) {
+                        labelClass += " selected";
+                        if (isItemLocked) {
+                          labelClass += lockedQuestions[item.displayId] === 'correct' ? " correct" : " incorrect";
+                        }
+                      }
+                      return `
+                        <label class="${labelClass}">
+                          <input type="radio" name="q-${item.displayId}" value="${opt.id}" ${answers[item.displayId] === opt.id ? 'checked' : ''} ${isItemLocked ? 'disabled' : ''}>
+                          <strong>${opt.id}</strong>. ${opt.text}
+                        </label>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
               `;
-            }).join('')}
-          </div>
+            } else {
+              return `
+                <div class="question-item active" style="display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 1.25rem; border: 1px solid var(--glass-border); border-radius: var(--border-radius); background: rgba(15,23,42,0.2);">
+                  <div class="question-title" style="font-size: 0.95rem; font-weight: 600; flex: 1; margin: 0;">
+                    Aufgabe ${item.displayId}: ${item.situationText || item.questionText}
+                  </div>
+                  <div style="display: flex; gap: 0.5rem; flex-shrink: 0;">
+                    <button class="matching-opt-btn tf-btn ${isSelectedFalsch ? 'selected' : ''}" 
+                            data-q-id="${item.displayId}" data-value="Falsch" ${isItemLocked ? 'disabled' : ''}
+                            style="width: 3.5rem; height: 3.5rem; display: flex; align-items: center; justify-content: center; border-radius: var(--border-radius-sm); background: ${btnFalschBg}; border: 1px solid ${btnFalschBorder}; color: var(--text-primary); cursor: ${isItemLocked ? 'not-allowed' : 'pointer'}; transition: all 0.2s; font-family: inherit; font-size: 1.5rem; font-weight: bold;">
+                      -
+                    </button>
+                    <button class="matching-opt-btn tf-btn ${isSelectedRichtig ? 'selected' : ''}" 
+                            data-q-id="${item.displayId}" data-value="Richtig" ${isItemLocked ? 'disabled' : ''}
+                            style="width: 3.5rem; height: 3.5rem; display: flex; align-items: center; justify-content: center; border-radius: var(--border-radius-sm); background: ${btnRichtigBg}; border: 1px solid ${btnRichtigBorder}; color: var(--text-primary); cursor: ${isItemLocked ? 'not-allowed' : 'pointer'}; transition: all 0.2s; font-family: inherit; font-size: 1.5rem; font-weight: bold;">
+                      +
+                    </button>
+                  </div>
+                </div>
+              `;
+            }
+          }).join('')}
         </div>
       `;
+      body = audioCardHtml + groupBody;
     } else {
       // Matching section (e.g. Reading Part 3, Language Part 2)
       body = `
@@ -285,103 +458,128 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
       `;
     }
 
-
-
     const nextLabel = idx === flatQuestions.length - 1 ? i18n.t("finish_btn") : i18n.t("next_btn");
     const nav = `
       <div style="display:flex;justify-content:space-between;margin-top:2rem;border-top:1px solid var(--glass-border);padding-top:1.5rem;">
-        <button id="prev-btn" class="btn btn-secondary" ${idx===0?'disabled':''}>${i18n.t("prev_btn")}</button>
+        <button id="prev-btn" class="btn btn-secondary">${i18n.t("prev_btn")}</button>
         <button id="next-btn" class="btn btn-primary">${nextLabel}</button>
       </div>
     `;
     pane.innerHTML = head + body + nav;
 
-    if (!isLocked) {
-      pane.querySelectorAll(`input[name="q-${q.displayId}"]`).forEach(inp => {
-        inp.addEventListener("change", (e) => {
-          answers[q.displayId] = e.target.value;
-          pane.querySelectorAll(".option-label").forEach(l => l.classList.remove("selected"));
-          e.target.parentElement.classList.add("selected");
-          document.getElementById(`nav-dot-${idx}`).classList.add("answered");
-          updateAnsweredCounter();
-        });
-      });
+    if (idx === 0) document.getElementById("prev-btn").setAttribute("disabled", "true");
 
-      pane.querySelectorAll(".matching-opt-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const val = btn.getAttribute("data-value");
-          if (val) {
-            answers[q.displayId] = val;
-            document.getElementById(`nav-dot-${idx}`).classList.add("answered");
-          } else {
-            delete answers[q.displayId];
-            document.getElementById(`nav-dot-${idx}`).classList.remove("answered");
-          }
-          
-          updateAnsweredCounter();
-          
-          // Update styling of buttons instantly
-          pane.querySelectorAll(".matching-opt-btn").forEach(b => {
-            const bVal = b.getAttribute("data-value");
-            const isSel = (bVal === val);
+    if (!isLocked) {
+      if (q.section === "Hörverstehen") {
+        pane.querySelectorAll('input[type="radio"]').forEach(inp => {
+          inp.addEventListener("change", (e) => {
+            const qId = parseInt(e.target.name.replace("q-", ""), 10);
+            answers[qId] = e.target.value;
+            e.target.closest(".options-list").querySelectorAll(".option-label").forEach(l => l.classList.remove("selected"));
+            e.target.parentElement.classList.add("selected");
             
-            if (bVal === "") {
-              // "No selection" button styles
-              b.style.background = isSel ? 'rgba(239, 68, 68, 0.1)' : 'rgba(15, 23, 42, 0.4)';
-              b.style.borderColor = isSel ? 'var(--error)' : 'var(--glass-border)';
-              b.style.color = isSel ? 'var(--error)' : 'var(--text-muted)';
-            } else {
-              // Normal option button styles
-              b.style.background = isSel ? 'rgba(99, 102, 241, 0.15)' : 'rgba(15, 23, 42, 0.4)';
-              b.style.borderColor = isSel ? 'var(--primary)' : 'var(--glass-border)';
-            }
+            const flatIdx = flatQuestions.findIndex(item => item.displayId === qId);
+            document.getElementById(`nav-dot-${flatIdx}`).classList.add("answered");
+            updateAnsweredCounter();
           });
         });
-      });
+
+        pane.querySelectorAll('.tf-btn').forEach(btn => {
+          btn.addEventListener("click", () => {
+            const qId = parseInt(btn.getAttribute("data-q-id"), 10);
+            const val = btn.getAttribute("data-value");
+            answers[qId] = val;
+
+            const flatIdx = flatQuestions.findIndex(item => item.displayId === qId);
+            document.getElementById(`nav-dot-${flatIdx}`).classList.add("answered");
+            updateAnsweredCounter();
+
+            const parent = btn.parentElement;
+            parent.querySelectorAll('.tf-btn').forEach(b => {
+              const bVal = b.getAttribute("data-value");
+              const isSel = (bVal === val);
+              b.style.background = isSel ? 'rgba(99, 102, 241, 0.15)' : 'rgba(15, 23, 42, 0.4)';
+              b.style.borderColor = isSel ? 'var(--primary)' : 'var(--glass-border)';
+            });
+          });
+        });
+      } else {
+        pane.querySelectorAll(`input[name="q-${q.displayId}"]`).forEach(inp => {
+          inp.addEventListener("change", (e) => {
+            answers[q.displayId] = e.target.value;
+            pane.querySelectorAll(".option-label").forEach(l => l.classList.remove("selected"));
+            e.target.parentElement.classList.add("selected");
+            document.getElementById(`nav-dot-${idx}`).classList.add("answered");
+            updateAnsweredCounter();
+          });
+        });
+
+        pane.querySelectorAll(".matching-opt-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const val = btn.getAttribute("data-value");
+            if (val) {
+              answers[q.displayId] = val;
+              document.getElementById(`nav-dot-${idx}`).classList.add("answered");
+            } else {
+              delete answers[q.displayId];
+              document.getElementById(`nav-dot-${idx}`).classList.remove("answered");
+            }
+            
+            updateAnsweredCounter();
+            
+            pane.querySelectorAll(".matching-opt-btn").forEach(b => {
+              const bVal = b.getAttribute("data-value");
+              const isSel = (bVal === val);
+              
+              if (bVal === "") {
+                b.style.background = isSel ? 'rgba(239, 68, 68, 0.1)' : 'rgba(15, 23, 42, 0.4)';
+                b.style.borderColor = isSel ? 'var(--error)' : 'var(--glass-border)';
+                b.style.color = isSel ? 'var(--error)' : 'var(--text-muted)';
+              } else {
+                b.style.background = isSel ? 'rgba(99, 102, 241, 0.15)' : 'rgba(15, 23, 42, 0.4)';
+                b.style.borderColor = isSel ? 'var(--primary)' : 'var(--glass-border)';
+              }
+            });
+          });
+        });
+      }
     }
 
-
-    document.getElementById("prev-btn").addEventListener("click", () => renderQuestion(idx-1));
-    document.getElementById("next-btn").addEventListener("click", () => {
-      if (idx < flatQuestions.length - 1) renderQuestion(idx + 1);
-      else if (confirm(i18n.t("confirm_submit"))) submit();
+    document.getElementById("prev-btn").addEventListener("click", () => {
+      const currentQ = flatQuestions[idx];
+      if (currentQ.section === "Hörverstehen") {
+        let prevIdx = idx - 1;
+        if (prevIdx >= 0) {
+          const prevQ = flatQuestions[prevIdx];
+          if (prevQ.section === "Hörverstehen") {
+            while (prevIdx > 0 && flatQuestions[prevIdx - 1].section === "Hörverstehen" && flatQuestions[prevIdx - 1].part === prevQ.part) {
+              prevIdx--;
+            }
+          }
+          renderQuestion(prevIdx);
+        }
+      } else {
+        renderQuestion(idx - 1);
+      }
     });
 
-    const playBtn = document.getElementById("audio-play-trigger");
-    if (playBtn) {
-      playBtn.addEventListener("click", () => {
-        if (isPlayingAudio) {
-          window.speechSynthesis.cancel();
-          isPlayingAudio = false;
-          playBtn.innerHTML = '<svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>';
-        } else {
-          const utterance = new SpeechSynthesisUtterance(q.audioScript || q.situationText);
-          utterance.lang = "de-DE";
-          const voices = window.speechSynthesis.getVoices();
-          const deVoice = voices.find(v => v.lang.startsWith("de") && v.name.includes("Google")) || voices.find(v => v.lang.startsWith("de"));
-          if (deVoice) utterance.voice = deVoice;
-
-          utterance.onend = () => {
-            isPlayingAudio = false;
-            playBtn.innerHTML = '<svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>';
-            document.getElementById("audio-progress").style.width = "100%";
-          };
-          isPlayingAudio = true;
-          playBtn.innerHTML = '<svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg>';
-          window.speechSynthesis.speak(utterance);
+    document.getElementById("next-btn").addEventListener("click", () => {
+      const currentQ = flatQuestions[idx];
+      if (currentQ.section === "Hörverstehen") {
+        let nextIdx = idx;
+        while (nextIdx < flatQuestions.length && flatQuestions[nextIdx].section === "Hörverstehen" && flatQuestions[nextIdx].part === currentQ.part) {
+          nextIdx++;
         }
-      });
-    }
-
-    const tt = document.getElementById("transcript-toggle");
-    if (tt) {
-      tt.addEventListener("click", () => {
-        const tr = document.getElementById("transcript-pane");
-        const isHidden = tr.style.display === "none";
-        tr.style.display = isHidden ? "block" : "none";
-        tt.innerText = isHidden ? i18n.t("hide_script") : i18n.t("show_script");
-      });
-    }
+        if (nextIdx < flatQuestions.length) {
+          renderQuestion(nextIdx);
+        } else {
+          if (confirm(i18n.t("confirm_submit"))) submit();
+        }
+      } else {
+        if (idx < flatQuestions.length - 1) renderQuestion(idx + 1);
+        else if (confirm(i18n.t("confirm_submit"))) submit();
+      }
+    });
   };
 
   const submit = (timeUp = false) => {

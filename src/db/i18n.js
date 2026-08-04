@@ -63,7 +63,10 @@ window.i18n = {
       confirm_logout: "Möchten Sie sich abmelden?",
       question_label: "Frage",
       answered_counter: "Beantwortet",
-      db_questions_count_label: "Fragen in der Datenbank"
+      db_questions_count_label: "Fragen in der Datenbank",
+      reading_pause: "Lesepause",
+      audio_playing: "Audio wird abgespielt...",
+      audio_finished: "Audio beendet."
     },
     en: {
       title: "Telc B2 Trainer",
@@ -115,7 +118,10 @@ window.i18n = {
       confirm_logout: "Do you want to log out?",
       question_label: "Question",
       answered_counter: "Answered",
-      db_questions_count_label: "questions in database"
+      db_questions_count_label: "questions in database",
+      reading_pause: "Reading Pause",
+      audio_playing: "Audio is playing...",
+      audio_finished: "Audio completed."
     }
   }
 };

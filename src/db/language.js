@@ -27,14 +27,14 @@ window.languageQuestionsSets = [
         title: "Sprachbausteine (Wortzuordnung)",
         description: "Lesen Sie den folgenden Brief und entscheiden Sie, welches Wort aus der Liste (A-O) in die jeweilige Lücke (31-40) passt. Jedes Wort kann nur einmal verwendet werden. Fünf Wörter bleiben übrig.",
         options: [
-          { id: "A", text: "seit" }, { id: "B", text: "dafür" }, { id: "C", text: "obwohl" }, { id: "D", text: "Trotz" }, { id: "E", text: "entsprochen" },
-          { id: "F", text: "gefordert" }, { id: "G", text: "wenn" }, { id: "H", text: "auf" }, { id: "I", text: "um" }, { id: "J", text: "damit" },
-          { id: "K", text: "zurück" }, { id: "L", text: "über" }, { id: "M", text: "gemietet" }, { id: "N", text: "ausgestattet" }, { id: "O", text: "enttäuscht" }
+          { id: "A", text: "seit" }, { id: "B", text: "auf" }, { id: "C", text: "obwohl" }, { id: "D", text: "dafür" }, { id: "E", text: "gefördert" },
+          { id: "F", text: "ob" }, { id: "G", text: "interessiert" }, { id: "H", text: "teilnehmen" }, { id: "I", text: "wenn" }, { id: "J", text: "für" },
+          { id: "K", text: "Trotz" }, { id: "L", text: "über" }, { id: "M", text: "um" }, { id: "N", text: "mit" }, { id: "O", text: "nach" }
         ],
         passage: "Liebe Anna,\n\nwie du weißt, suche ich ___31___ einigen Monaten nach einer neuen beruflichen Herausforderung. Nun habe ich endlich eine Zusage bekommen! Ich werde ab dem nächsten Monat als Marketing-Managerin arbeiten.\n\nIch freue mich riesig ___32___ diese neue Aufgabe, ___33___ die Einarbeitung sicher nicht einfach sein wird. Das Unternehmen verlangt viele Vorkenntnisse. Ich habe mich bereits ___34___ entschieden, an einem Online-Fortbildungskurs teilzunehmen. Der Kurs wird glücklicherweise vom Staat ___35___, sodass ich fast nichts selbst bezahlen muss.\n\nIch wollte dich fragen, ob du Lust hast, am kommenden Wochenende mit mir zu feiern. Ich lade dich herzlich zu mir ein. Sag mir bitte Bescheid, ___36___ du Zeit hast. Solltest du am Samstag keine Zeit haben, können wir uns auch am Sonntag treffen. Ich bin sehr an deinen Neuigkeiten ___37___. Hast du eigentlich dein Studium schon abgeschlossen?\n\nÜbrigens, weißt du, ob Felix auch an unserer Feier ___38___ möchte? Er hatte vor ein paar Tagen Geburtstag, aber ich habe ihn nicht erreicht. Ich würde mich freuen, ___39___ wir uns alle bald wiedersehen könnten. \n\nSchreib mir bald! Vielen Dank ___40___ deine Unterstützung in den letzten Wochen.\n\nLiebe Grüße\nLaura",
         items: [
-          { id: 31, correctAnswer: "A" }, { id: 32, correctAnswer: "L" }, { id: 33, correctAnswer: "C" }, { id: 34, correctAnswer: "B" }, { id: 35, correctAnswer: "F" },
-          { id: 36, correctAnswer: "G" }, { id: 37, correctAnswer: "O" }, { id: 38, correctAnswer: "M" }, { id: 39, correctAnswer: "G" }, { id: 40, correctAnswer: "I" }
+          { id: 31, correctAnswer: "A" }, { id: 32, correctAnswer: "B" }, { id: 33, correctAnswer: "C" }, { id: 34, correctAnswer: "D" }, { id: 35, correctAnswer: "E" },
+          { id: 36, correctAnswer: "F" }, { id: 37, correctAnswer: "G" }, { id: 38, correctAnswer: "H" }, { id: 39, correctAnswer: "I" }, { id: 40, correctAnswer: "J" }
         ]
       }
     ]
@@ -55,7 +55,7 @@ window.languageQuestionsSets = [
           { id: 23, label: "Lücke 23", options: [{ id: "a", text: "in" }, { id: "b", text: "an" }, { id: "c", text: "auf" }], correctAnswer: "a" },
           { id: 24, label: "Lücke 24", options: [{ id: "a", text: "denen" }, { id: "b", text: "welchen" }, { id: "c", text: "ihnen" }], correctAnswer: "a" },
           { id: 25, label: "Lücke 25", options: [{ id: "a", text: "einen" }, { id: "b", text: "den" }, { id: "c", text: "dem" }], correctAnswer: "b" },
-          { id: 26, label: "Lücke 26", options: [{ id: "a", text: "zu" }, { id: "b", text: "um" }, { id: "c", text: "für" }], correctAnswer: "a" },
+          { id: 26, label: "Lücke 26", options: [{ id: "a", text: "zu" }, { id: "b", text: "um" }, { id: "c", text: "for" }], correctAnswer: "a" },
           { id: 27, label: "Lücke 27", options: [{ id: "a", text: "müsste" }, { id: "b", text: "könnte" }, { id: "c", text: "hätte" }], correctAnswer: "b" },
           { id: 28, label: "Lücke 28", options: [{ id: "a", text: "unterhalten" }, { id: "b", text: "besprechen" }, { id: "c", text: "abstimmen" }], correctAnswer: "a" },
           { id: 29, label: "Lücke 29", options: [{ id: "a", text: "vorzustellen" }, { id: "b", text: "darzustellen" }, { id: "c", text: "einzustellen" }], correctAnswer: "a" },
@@ -168,18 +168,18 @@ window.languageQuestionsSets = [
         part: "Teil 1",
         title: "Sprachbausteine (Multiple-Choice)",
         description: "Lesen Sie den folgenden Text und entscheiden Sie, welches Wort (a, b oder c) in die jeweilige Lücke passt.",
-        passage: "Sehr geehrte Damen und Herren,\n\nich wende mich an Sie, ___21___ ich ein Abonnement Ihrer Fachzeitschrift kündigen möchte. Seit über zwei Jahren beziehe ich Ihr Magazin regelmäsig, ___22___ ich mich nun aus beruflichen Gründen neu orientieren muss und das Magazin nicht mehr benötige.\n\nIch bitte Sie daher, meine Kündigung zum nächstmöglichen Zeitpunkt ___23___ bestätigen. Nach meinen Unterlagen müsste dies der 30. September sein. Bitte senden Sie mir eine schriftliche Bestätigung, ___24___ der das genaue Enddatum des Vertrages hervorgeht.\n\nZudem möchte ich Sie bitten, meine Einzugsermächtigung für das genannte Abonnement ___25___ Ablauf des Vertrages zu widerrufen. Es soll nach diesem Datum ___26___ Geld mehr von meinem Konto abgebucht werden.\n\nIch bedanke mich ___27___ die gute Zusammenarbeit und die stets interessanten Artikel in den vergangenen Jahren. Sollte es Rückfragen ___28___ meiner Kündigung geben, können Sie mich jederzeit telefonisch ___29___ per E-Mail erreichen.\n\nMit freundlichen Grüßen\nJulian Becker\n\nKunden-___30___: 98452-AB",
+        passage: "Sehr geehrte Damen und Herren,\n\nich wende mich heute an Sie, ___21___ ich mich über eine Fehlbuchung auf meinem Konto beschweren möchte. Gestern stellte ich fest, ___22___ Sie mir den Betrag für die monatliche Gebühr doppelt abgebucht haben. \n\nIm Vertrag steht, dass die Gebühr am ersten Werktag ___23___ Monats fällig ist. Dies war ___24___ nicht der Fall. Ich bitte Sie daher, mir die zu viel gezahlte Gebühr ___25___ zu erstatten.\n\nSollte dies nicht geschehen, werde ich mich ___26___ meine Bank wenden. Bitte informieren Sie mich ___27___ die getroffenen Schritte.\n\nIch hoffe auf eine schnelle Klärung ___28___ Angelegenheit.\n\nMit freundlichen Grüßen\nPeter Müller\n\nKonto: DE12 3456 7890\nKundennummer: ___30___",
         questions: [
           { id: 21, label: "Lücke 21", options: [{ id: "a", text: "weil" }, { id: "b", text: "denn" }, { id: "c", text: "deshalb" }], correctAnswer: "a" },
-          { id: 22, label: "Lücke 22", options: [{ id: "a", text: "trotzdem" }, { id: "b", text: "jedoch" }, { id: "c", text: "obwohl" }], correctAnswer: "b" },
-          { id: 23, label: "Lücke 23", options: [{ id: "a", text: "zu" }, { id: "b", text: "um" }, { id: "c", text: "für" }], correctAnswer: "a" },
-          { id: 24, label: "Lücke 24", options: [{ id: "a", text: "in" }, { id: "b", text: "aus" }, { id: "c", text: "bei" }], correctAnswer: "b" },
-          { id: 25, label: "Lücke 25", options: [{ id: "a", text: "nach" }, { id: "b", text: "vor" }, { id: "c", text: "seit" }], correctAnswer: "a" },
-          { id: 26, label: "Lücke 26", options: [{ id: "a", text: "kein" }, { id: "b", text: "keines" }, { id: "c", text: "nicht" }], correctAnswer: "a" },
-          { id: 27, label: "Lücke 27", options: [{ id: "a", text: "für" }, { id: "b", text: "über" }, { id: "c", text: "wegen" }], correctAnswer: "a" },
-          { id: 28, label: "Lücke 28", options: [{ id: "a", text: "zu" }, { id: "b", text: "an" }, { id: "c", text: "für" }], correctAnswer: "a" },
-          { id: 29, label: "Lücke 29", options: [{ id: "a", text: "oder" }, { id: "b", text: "sowie" }, { id: "c", text: "aber" }], correctAnswer: "a" },
-          { id: 30, label: "Lücke 30", options: [{ id: "a", text: "Nummer" }, { id: "b", text: "Karte" }, { id: "c", text: "Name" }], correctAnswer: "a" }
+          { id: 22, label: "Lücke 22", options: [{ id: "a", text: "dass" }, { id: "b", text: "weil" }, { id: "c", text: "wenn" }], correctAnswer: "a" },
+          { id: 23, label: "Lücke 23", options: [{ id: "a", text: "des" }, { id: "b", text: "dem" }, { id: "c", text: "den" }], correctAnswer: "a" },
+          { id: 24, label: "Lücke 24", options: [{ id: "a", text: "jedoch" }, { id: "b", text: "obwohl" }, { id: "c", text: "trotzdem" }], correctAnswer: "a" },
+          { id: 25, label: "Lücke 25", options: [{ id: "a", text: "umgehend" }, { id: "b", text: "schnell" }, { id: "c", text: "bald" }], correctAnswer: "a" },
+          { id: 26, label: "Lücke 26", options: [{ id: "a", text: "an" }, { id: "b", text: "zu" }, { id: "c", text: "bei" }], correctAnswer: "a" },
+          { id: 27, label: "Lücke 27", options: [{ id: "a", text: "über" }, { id: "b", text: "an" }, { id: "c", text: "für" }], correctAnswer: "a" },
+          { id: 28, label: "Lücke 28", options: [{ id: "a", text: "dieser" }, { id: "b", text: "jener" }, { id: "c", text: "solcher" }], correctAnswer: "a" },
+          { id: 29, label: "Lücke 29", options: [{ id: "a", text: "zu" }, { id: "b", text: "an" }, { id: "c", text: "für" }], correctAnswer: "a" },
+          { id: 30, label: "Lücke 30", options: [{ id: "a", text: "12345" }, { id: "b", text: "Name" }, { id: "c", text: "Nummer" }], correctAnswer: "a" }
         ]
       },
       {
@@ -187,14 +187,14 @@ window.languageQuestionsSets = [
         title: "Sprachbausteine (Wortzuordnung)",
         description: "Lesen Sie den folgenden Brief und entscheiden Sie, welches Wort aus der Liste (A-O) in die jeweilige Lücke (31-40) passt. Jedes Wort kann nur einmal verwendet werden. Fünf Wörter bleiben übrig.",
         options: [
-          { id: "A", text: "nach" }, { id: "B", text: "seit" }, { id: "C", text: "vor" }, { id: "D", text: "obwohl" }, { id: "E", text: "trotzdem" },
-          { id: "F", text: "an" }, { id: "G", text: "auf" }, { id: "H", text: "wenn" }, { id: "I", text: "wegen" }, { id: "J", text: "neben" },
-          { id: "K", text: "durch" }, { id: "L", text: "wann" }, { id: "M", text: "bestehen" }, { id: "N", text: "besteht" }, { id: "O", text: "knüpfen" }
+          { id: "A", text: "weil" }, { id: "B", text: "vor" }, { id: "C", text: "dafür" }, { id: "D", text: "wenn" }, { id: "E", text: "zu" },
+          { id: "F", text: "wann" }, { id: "G", text: "auf" }, { id: "H", text: "über" }, { id: "I", text: "bei" }, { id: "J", text: "an" },
+          { id: "K", text: "obwohl" }, { id: "L", text: "mit" }, { id: "M", text: "nach" }, { id: "N", text: "durch" }, { id: "O", text: "seit" }
         ],
         passage: "Liebe Julia,\n\nich hoffe, du hast eine schöne Woche. Ich schreibe dir, ___31___ ich deine Hilfe bei der Vorbereitung für meinen Vortrag nächste Woche brauche. Wie du weißt, bin ich ___32___ solchen Auftritten immer sehr nervös.\n\nIch habe mich ___33___ entschieden, eine Präsentation über Umweltschutz im Alltag zu halten. Ich würde mich freuen, ___34___ du mal einen Blick auf meine Folien werfen könntest. Ich möchte sichergehen, dass die Folien nicht mit Text überladen sind und die Grafiken ___35___ den Inhalten passen.\n\nDer Vortrag findet am Donnerstag statt. Bitte sag mir Bescheid, ___36___ du Zeit hast, damit wir uns treffen können. Gerne lade ich dich als Dankeschön ___37___ ein Stück Kuchen in mein Lieblingscafé ein. \n\nIch freue mich schon ___38___ deine Rückmeldung. Ich hoffe, dass du mir ___39___ der Vorbereitung ein paar gute Tipps geben kannst.\n\nBis bald und liebe Grüße ___40___ die Familie!\nDeine Marie",
         items: [
-          { id: 31, correctAnswer: "I" }, { id: 32, correctAnswer: "C" }, { id: 33, correctAnswer: "G" }, { id: 34, correctAnswer: "H" }, { id: 35, correctAnswer: "F" },
-          { id: 36, correctAnswer: "L" }, { id: 37, correctAnswer: "G" }, { id: 38, correctAnswer: "G" }, { id: 39, correctAnswer: "J" }, { id: 40, correctAnswer: "F" }
+          { id: 31, correctAnswer: "A" }, { id: 32, correctAnswer: "B" }, { id: 33, correctAnswer: "C" }, { id: 34, correctAnswer: "D" }, { id: 35, correctAnswer: "E" },
+          { id: 36, correctAnswer: "F" }, { id: 37, correctAnswer: "G" }, { id: 38, correctAnswer: "H" }, { id: 39, correctAnswer: "I" }, { id: 40, correctAnswer: "J" }
         ]
       }
     ]
@@ -208,47 +208,7 @@ window.languageQuestionsSets = [
         part: "Teil 1",
         title: "Sprachbausteine (Multiple-Choice)",
         description: "Lesen Sie den folgenden Text und entscheiden Sie, welches Wort (a, b oder c) in die jeweilige Lücke passt.",
-        passage: "Sehr geehrte Damen und Herren,\n\nich wende mich heute an Sie, ___21___ ich mich über das Seminar 'Zeitmanagement im Beruf' beschweren möchte, ___22___ ich am vergangenen Wochenende teilgenommen habe. Leider hat die Veranstaltung keineswegs meinen Erwartungen ___23___.\n\nIn der Ankündigung wurde versprochen, dass erfahrene Referenten praxisnahe Tipps vermitteln würden. Der Dozent war ___24___ theoretisch orientiert und ging kaum auf die Fragen der Teilnehmer ein. Zudem war der Seminarraum für die Anzahl der Personen viel ___25___ klein und schlecht belüftet.\n\nEin weiterer Kritikpunkt betrifft das Catering. Obwohl im Preis Kaffee und Gebäck inbegriffen sein ___26___, gab es am Nachmittag überhaupt keine Verpflegung mehr. ___27___ dieser Mängel fordere ich eine Rückerstattung von 50 Prozent der Seminargebühr.\n\nIch bitte Sie, mir den Betrag innerhalb der nächsten zwei Wochen auf mein Konto zu ___28___. Bitte informieren Sie mich ___29___, ob Sie meiner Forderung nachkommen.\n\nMit freundlichen Grüßen\nMichael Schmitz\n\nAnhang: ___30___ der Teilnahmebestätigung und Rechnung",
-        questions: [
-          { id: 21, label: "Lücke 21", options: [{ id: "a", text: "weil" }, { id: "b", text: "denn" }, { id: "c", text: "deshalb" }], correctAnswer: "a" },
-          { id: 22, label: "Lücke 22", options: [{ id: "a", text: "an dem" }, { id: "b", text: "woran" }, { id: "c", text: "in dem" }], correctAnswer: "a" },
-          { id: 23, label: "Lücke 23", options: [{ id: "a", text: "entsprochen" }, { id: "b", text: "gepasst" }, { id: "c", text: "getroffen" }], correctAnswer: "a" },
-          { id: 24, label: "Lücke 24", options: [{ id: "a", text: "sehr" }, { id: "b", text: "ausschließlich" }, { id: "c", text: "fast" }], correctAnswer: "b" },
-          { id: 25, label: "Lücke 25", options: [{ id: "a", text: "zu" }, { id: "b", text: "sehr" }, { id: "c", text: "viel" }], correctAnswer: "a" },
-          { id: 26, label: "Lücke 26", options: [{ id: "a", text: "sollten" }, { id: "b", text: "wollten" }, { id: "c", text: "müssten" }], correctAnswer: "a" },
-          { id: 27, label: "Lücke 27", options: [{ id: "a", text: "Aufgrund" }, { id: "b", text: "Trotz" }, { id: "c", text: "Obwohl" }], correctAnswer: "a" },
-          { id: 28, label: "Lücke 28", options: [{ id: "a", text: "überweisen" }, { id: "b", text: "senden" }, { id: "c", text: "geben" }], correctAnswer: "a" },
-          { id: 29, label: "Lücke 29", options: [{ id: "a", text: "darüber" }, { id: "b", text: "dazu" }, { id: "c", text: "hierüber" }], correctAnswer: "a" },
-          { id: 30, label: "Lücke 30", options: [{ id: "a", text: "Kopie" }, { id: "b", text: "Original" }, { id: "c", text: "Anhang" }], correctAnswer: "a" }
-        ]
-      },
-      {
-        part: "Teil 2",
-        title: "Sprachbausteine (Wortzuordnung)",
-        description: "Lesen Sie den folgenden Brief und entscheiden Sie, welches Wort aus der Liste (A-O) in die jeweilige Lücke (31-40) passt. Jedes Wort kann nur einmal verwendet werden. Fünf Wörter bleiben übrig.",
-        options: [
-          { id: "A", text: "da" }, { id: "B", text: "deshalb" }, { id: "C", text: "denn" }, { id: "D", text: "obwohl" }, { id: "E", text: "Trotz" },
-          { id: "F", text: "viele" }, { id: "G", text: "wenige" }, { id: "H", text: "nutzen" }, { id: "I", text: "besitzen" }, { id: "J", text: "an" },
-          { id: "K", text: "auf" }, { id: "L", text: "wenn" }, { id: "M", text: "mit" }, { id: "N", text: "ohne" }, { id: "O", text: "um" }
-        ],
-        passage: "Das Internet hat den Lebensalltag von Kindern und Jugendlichen nachhaltig verändert. Fast alle Teenager ___31___ heute ein Smartphone und nutzen es täglich mehrere Stunden. ___32___ der Warnungen von Experten vor Risiken wie Mediensucht ist das Handy aus dem Alltag nicht mehr wegzudenken. Die Jugendlichen nutzen soziale Netzwerke, ___33___ mit Freunden in Kontakt zu bleiben oder Videos anzusehen.\n\n___34___ bietet das Netz auch Chancen für die Bildung. Schulen nutzen vermehrt digitale Medien, ___35___ den Unterricht interaktiver zu gestalten. Viele Lernplattformen helfen Schülern, schwierige Themen selbstständig zu wiederholen. \n\nDie Verantwortung liegt letztlich bei den Eltern. Sie müssen darauf achten, ___36___ ihre Kinder nicht zu viel Zeit vor dem Bildschirm verbringen. Eine gesunde Mischung aus digitaler Aktivität und Hobbys an der frischen Luft ist wichtig, ___37___ die Entwicklung nicht beeinträchtigt wird. ___38___ die Eltern klare Regeln aufstellen, lässt sich das Smartphone sinnvoll in den Alltag integrieren, ___39___ dass die schulischen Leistungen oder sozialen Kontakte ___40___ leiden müssen.",
-        items: [
-          { id: 31, correctAnswer: "I" }, { id: 32, correctAnswer: "E" }, { id: 33, correctAnswer: "O" }, { id: 34, correctAnswer: "B" }, { id: 35, correctAnswer: "O" },
-          { id: 36, correctAnswer: "L" }, { id: 37, correctAnswer: "A" }, { id: 38, correctAnswer: "L" }, { id: 39, correctAnswer: "N" }, { id: 40, correctAnswer: "K" }
-        ]
-      }
-    ]
-  },
-
-  // ==================== TEST SET 7 ====================
-  {
-    setId: 7,
-    parts: [
-      {
-        part: "Teil 1",
-        title: "Sprachbausteine (Multiple-Choice)",
-        description: "Lesen Sie den folgenden Text und entscheiden Sie, welches Wort (a, b oder c) in die jeweilige Lücke passt.",
-        passage: "Sehr geehrte Damen und Herren,\n\nich schreibe Ihnen, ___21___ ich mich über den Zustand der Mietwohnung beschweren möchte, die ich seit letztem Monat bei Ihnen gemietet habe. Bei der Besichtigung sah alles gut aus, ___22___ haben sich kurz nach dem Einzug erhebliche Mängel gezeigt. \n\nDie Heizung im Wohnzimmer funktioniert überhaupt nicht. ___23___ der kühlen Herbsttemperaturen ist es in der Wohnung unerträglich kalt. Ich habe bereits versucht, den Hausmeister ___24___ kontaktieren, leider ohne Erfolg. Er war telefonisch nicht erreichbar und hat auch ___25___ meine Nachrichten nicht reagiert.\n\nZudem gibt es im Badezimmer einen kleinen Wasserschaden ___26___ der Decke. Ich bitte Sie daher dringend, eine Fachfirma mit der Reparatur der Heizung zu ___27___. Sollte der Schaden bis Ende nächster Woche nicht behoben sein, werde ich die Miete für den nächsten Monat ___28___ 20 Prozent mindern.\n\nIch hoffe ___29___ eine schnelle Behebung dieser Probleme und erwarte Ihre schriftliche ___30___ innerhalb von drei Tagen.\n\nMit freundlichen Grüßen\nChristian Wagner",
+        passage: "Sehr geehrte Damen und Herren,\n\nich wende mich heute an Sie, ___21___ ich mich über den Zustand der Mietwohnung beschweren möchte. Bei der Besichtigung sah alles gut aus, ___22___ haben sich kurz nach dem Einzug erhebliche Mängel gezeigt. \n\nDie Heizung im Wohnzimmer funktioniert überhaupt nicht. ___23___ der kühlen Herbsttemperaturen ist es in der Wohnung unerträglich kalt. Ich habe bereits versucht, den Hausmeister ___24___ kontaktieren, leider ohne Erfolg. Er war telefonisch nicht erreichbar und hat auch ___25___ meine Nachrichten nicht reagiert.\n\nZudem gibt es im Badezimmer einen kleinen Wasserschaden ___26___ der Decke. Ich bitte Sie daher dringend, eine Fachfirma mit der Reparatur der Heizung zu ___27___. Sollte der Schaden bis Ende nächster Woche nicht behoben sein, werde ich die Miete für den nächsten Monat ___28___ 20 Prozent mindern.\n\nIch hoffe ___29___ eine schnelle Behebung dieser Probleme und erwarte Ihre schriftliche ___30___ innerhalb von drei Tagen.\n\nMit freundlichen Grüßen\nChristian Wagner",
         questions: [
           { id: 21, label: "Lücke 21", options: [{ id: "a", text: "weil" }, { id: "b", text: "denn" }, { id: "c", text: "deshalb" }], correctAnswer: "a" },
           { id: 22, label: "Lücke 22", options: [{ id: "a", text: "jedoch" }, { id: "b", text: "obwohl" }, { id: "c", text: "trotzdem" }], correctAnswer: "a" },
@@ -267,14 +227,54 @@ window.languageQuestionsSets = [
         title: "Sprachbausteine (Wortzuordnung)",
         description: "Lesen Sie den folgenden Brief und entscheiden Sie, welches Wort aus der Liste (A-O) in die jeweilige Lücke (31-40) passt. Jedes Wort kann nur einmal verwendet werden. Fünf Wörter bleiben übrig.",
         options: [
-          { id: "A", text: "nach" }, { id: "B", text: "seit" }, { id: "C", text: "vor" }, { id: "D", text: "obwohl" }, { id: "E", text: "trotzdem" },
-          { id: "F", text: "an" }, { id: "G", text: "auf" }, { id: "H", text: "wenn" }, { id: "I", text: "wegen" }, { id: "J", text: "neben" },
-          { id: "K", text: "durch" }, { id: "L", text: "wann" }, { id: "M", text: "bestehen" }, { id: "N", text: "besteht" }, { id: "O", text: "knüpfen" }
+          { id: "A", text: "besitzen" }, { id: "B", text: "Trotz" }, { id: "C", text: "um" }, { id: "D", text: "Deshalb" }, { id: "E", text: "damit" },
+          { id: "F", text: "dass" }, { id: "G", text: "sodass" }, { id: "H", text: "Wenn" }, { id: "I", text: "ohne" }, { id: "J", text: "darunter" },
+          { id: "K", text: "an" }, { id: "L", text: "mit" }, { id: "M", text: "von" }, { id: "N", text: "nach" }, { id: "O", text: "seit" }
+        ],
+        passage: "Das Internet hat den Lebensalltag von Kindern und Jugendlichen nachhaltig verändert. Fast alle Teenager ___31___ heute ein Smartphone und nutzen es täglich mehrere Stunden. ___32___ der Warnungen von Experten vor Risiken wie Mediensucht ist das Handy aus dem Alltag nicht mehr wegzudenken. Die Jugendlichen nutzen soziale Netzwerke, ___33___ mit Freunden in Kontakt zu bleiben oder Videos anzusehen.\n\n___34___ bietet das Netz auch Chancen für die Bildung. Schulen nutzen vermehrt digitale Medien, ___35___ der Unterricht interaktiver wird. Viele Lernplattformen helfen Schülern, schwierige Themen selbstständig zu wiederholen. \n\nDie Verantwortung liegt letztlich bei den Eltern. Sie müssen darauf achten, ___36___ ihre Kinder nicht zu viel Zeit vor dem Bildschirm verbringen. Eine gesunde Mischung aus digitaler Aktivität und Hobbys an der frischen Luft ist wichtig, ___37___ die Entwicklung nicht beeinträchtigt wird. ___38___ die Eltern klare Regeln aufstellen, lässt sich das Smartphone sinnvoll in den Alltag integrieren, ___39___ dass die schulischen Leistungen oder sozialen Kontakte ___40___ leiden müssen.",
+        items: [
+          { id: 31, correctAnswer: "A" }, { id: 32, correctAnswer: "B" }, { id: 33, correctAnswer: "C" }, { id: 34, correctAnswer: "D" }, { id: 35, correctAnswer: "E" },
+          { id: 36, correctAnswer: "F" }, { id: 37, correctAnswer: "G" }, { id: 38, correctAnswer: "H" }, { id: 39, correctAnswer: "I" }, { id: 40, correctAnswer: "J" }
+        ]
+      }
+    ]
+  },
+
+  // ==================== TEST SET 7 ====================
+  {
+    setId: 7,
+    parts: [
+      {
+        part: "Teil 1",
+        title: "Sprachbausteine (Multiple-Choice)",
+        description: "Lesen Sie den folgenden Text und entscheiden Sie, welches Wort (a, b oder c) in die jeweilige Lücke passt.",
+        passage: "Sehr geehrte Damen und Herren,\n\nich schreibe Ihnen, ___21___ ich mich über den Zustand der Mietwohnung beschweren möchte, die ich seit letztem Monat bei Ihnen gemietet habe. Bei der Besichtigung sah alles gut aus, ___22___ haben sich kurz nach dem Einzug erhebliche Mängel gezeigt. \n\nDie Heizung im Wohnzimmer funktioniert überhaupt nicht. ___23___ der kühlen Herbsttemperaturen is es in der Wohnung unerträglich kalt. Ich habe bereits versucht, den Hausmeister ___24___ kontaktieren, leider ohne Erfolg. Er war telefonisch nicht erreichbar und hat auch ___25___ meine Nachrichten nicht reagiert.\n\nZudem gibt es im Badezimmer einen kleinen Wasserschaden ___26___ der Decke. Ich bitte Sie daher dringend, eine Fachfirma mit der Reparatur der Heizung zu ___27___. Sollte der Schaden bis Ende nächster Woche nicht behoben sein, werde ich die Miete für den nächsten Monat ___28___ 20 Prozent mindern.\n\nIch hoffe ___29___ eine schnelle Behebung dieser Probleme und erwarte Ihre schriftliche ___30___ innerhalb von drei Tagen.\n\nMit freundlichen Grüßen\nChristian Wagner",
+        questions: [
+          { id: 21, label: "Lücke 21", options: [{ id: "a", text: "weil" }, { id: "b", text: "denn" }, { id: "c", text: "deshalb" }], correctAnswer: "a" },
+          { id: 22, label: "Lücke 22", options: [{ id: "a", text: "jedoch" }, { id: "b", text: "obwohl" }, { id: "c", text: "trotzdem" }], correctAnswer: "a" },
+          { id: 23, label: "Lücke 23", options: [{ id: "a", text: "Wegen" }, { id: "b", text: "Trotz" }, { id: "c", text: "Obwohl" }], correctAnswer: "a" },
+          { id: 24, label: "Lücke 24", options: [{ id: "a", text: "zu" }, { id: "b", text: "um" }, { id: "c", text: "an" }], correctAnswer: "a" },
+          { id: 25, label: "Lücke 25", options: [{ id: "a", text: "auf" }, { id: "b", text: "für" }, { id: "c", text: "an" }], correctAnswer: "a" },
+          { id: 26, label: "Lücke 26", options: [{ id: "a", text: "an" }, { id: "b", text: "auf" }, { id: "c", text: "in" }], correctAnswer: "a" },
+          { id: 27, label: "Lücke 27", options: [{ id: "a", text: "beauftragen" }, { id: "b", text: "schicken" }, { id: "c", text: "anrufen" }], correctAnswer: "a" },
+          { id: 28, label: "Lücke 28", options: [{ id: "a", text: "um" }, { id: "b", text: "für" }, { id: "c", text: "an" }], correctAnswer: "a" },
+          { id: 29, label: "Lücke 29", options: [{ id: "a", text: "auf" }, { id: "b", text: "über" }, { id: "c", text: "an" }], correctAnswer: "a" },
+          { id: 30, label: "Lücke 30", options: [{ id: "a", text: "Antwort" }, { id: "b", text: "Frage" }, { id: "c", text: "Zustimmung" }], correctAnswer: "a" }
+        ]
+      },
+      {
+        part: "Teil 2",
+        title: "Sprachbausteine (Wortzuordnung)",
+        description: "Lesen Sie den folgenden Brief und entscheiden Sie, welches Wort aus der Liste (A-O) in die jeweilige Lücke (31-40) passt. Jedes Wort kann nur einmal verwendet werden. Fünf Wörter bleiben übrig.",
+        options: [
+          { id: "A", text: "weil" }, { id: "B", text: "in" }, { id: "C", text: "über" }, { id: "D", text: "obwohl" }, { id: "E", text: "trotzdem" },
+          { id: "F", text: "wann" }, { id: "G", text: "damit" }, { id: "H", text: "welche" }, { id: "I", text: "auf" }, { id: "J", text: "inmitten" },
+          { id: "K", text: "neben" }, { id: "L", text: "seit" }, { id: "M", text: "vor" }, { id: "N", text: "mit" }, { id: "O", text: "nach" }
         ],
         passage: "Liebe Sabine,\n\nich hoffe, es geht dir gut. Ich schreibe dir, ___31___ ich deine Hilfe bei der Planung für unsere nächste Wanderung brauche. Wir haben uns ja vorgenommen, am kommenden Sonntag ___32___ die Berge zu fahren.\n\nIch habe mich bereits ___33___ zwei mögliche Routen informiert. Die erste Route führt zu einer urigen Hütte, ___34___ die Wanderzeit dort mit vier Stunden recht lang ist. Die zweite Route ist kürzer, bietet aber ___35___ eine wunderschöne Aussicht auf den See.\n\nWir müssen uns entscheiden, ___36___ wir starten wollen. Ich schlage vor, sehr früh am Morgen abzufahren, ___37___ wir die Mittagshitze vermeiden können. Bitte sag mir Bescheid, ___38___ Route dir besser gefällt.\n\nIch freue mich schon sehr ___39___ den Ausflug mit dir. Ich hoffe, dass das Wetter hält und wir einen tollen Tag ___40___ der Natur verbringen werden.\n\nBis bald!\nDeine Claudia",
         items: [
-          { id: 31, correctAnswer: "I" }, { id: 32, correctAnswer: "F" }, { id: 33, correctAnswer: "L" }, { id: 34, correctAnswer: "D" }, { id: 35, correctAnswer: "E" },
-          { id: 36, correctAnswer: "L" }, { id: 37, correctAnswer: "H" }, { id: 38, correctAnswer: "H" }, { id: 39, correctAnswer: "G" }, { id: 40, correctAnswer: "F" }
+          { id: 31, correctAnswer: "A" }, { id: 32, correctAnswer: "B" }, { id: 33, correctAnswer: "C" }, { id: 34, correctAnswer: "D" }, { id: 35, correctAnswer: "E" },
+          { id: 36, correctAnswer: "F" }, { id: 37, correctAnswer: "G" }, { id: 38, correctAnswer: "H" }, { id: 39, correctAnswer: "I" }, { id: 40, correctAnswer: "J" }
         ]
       }
     ]
@@ -307,17 +307,16 @@ window.languageQuestionsSets = [
         title: "Sprachbausteine (Wortzuordnung)",
         description: "Lesen Sie den folgenden Brief und entscheiden Sie, welches Wort aus der Liste (A-O) in die jeweilige Lücke (31-40) passt. Jedes Wort kann nur einmal verwendet werden. Fünf Wörter bleiben übrig.",
         options: [
-          { id: "A", text: "da" }, { id: "B", text: "deshalb" }, { id: "C", text: "denn" }, { id: "D", text: "obwohl" }, { id: "E", text: "Trotz" },
-          { id: "F", text: "viele" }, { id: "G", text: "wenige" }, { id: "H", text: "nutzen" }, { id: "I", text: "besitzen" }, { id: "J", text: "an" },
-          { id: "K", text: "auf" }, { id: "L", text: "wenn" }, { id: "M", text: "mit" }, { id: "N", text: "ohne" }, { id: "O", text: "um" }
+          { id: "A", text: "dafür" }, { id: "B", text: "nutzen" }, { id: "C", text: "Trotz" }, { id: "D", text: "um" }, { id: "E", text: "Neben" },
+          { id: "F", text: "wenn" }, { id: "G", text: "weil" }, { id: "H", text: "ohne" }, { id: "I", text: "da" }, { id: "J", text: "zum" },
+          { id: "K", text: "an" }, { id: "L", text: "mit" }, { id: "M", text: "von" }, { id: "N", text: "nach" }, { id: "O", text: "seit" }
         ],
-        passage: "Das Fahrrad hat als umweltfreundliches Verkehrsmittel in deutschen Großstädten an Bedeutung gewonnen. Viele Menschen entscheiden sich ___31___, ihr Auto stehenzulassen und das Rad für den täglichen Arbeitsweg zu ___32___. ___33___ dieser positiven Entwicklung gibt es auch Probleme: Die Radwege sind oft überfüllt und in schlechtem Zustand. Die Städte müssen investieren, ___34___ die Sicherheit der Radfahrer zu garantieren.\n\n___35___ der Vorteile des Radfahrens im Alltag gibt es Kritik. In Stoßzeiten sind oft keine Stellplätze an Bahnhöfen frei, ___36___ man das Rad dort abstellen will. Zudem sind die Radwege im Winter oft nicht geräumt.\n\nFür den Umweltschutz ist das Fahrrad besonders sinnvoll, ___37___ dadurch Autofahrten vermieden werden. Experten betonen, dass viele Menschen ___38___ Rad auch kürzere Strecken problemlos zu Fuß gehen könnten. Die Entwicklung bleibt also spannend, ___39___ immer mehr Menschen das Rad im Alltag für kurze Wege als echte Alternative ___40___ Auto ansehen.",
+        passage: "Das Fahrrad hat als umweltfreundliches Verkehrsmittel in deutschen Großstädten an Bedeutung gewonnen. Viele Menschen entscheiden sich ___31___, ihr Auto stehenzulassen und das Rad für den täglichen Arbeitsweg zu ___32___. ___33___ dieser positiven Entwicklung gibt es auch Probleme: Die Radwege sind oft überfüllt und in schlechtem Zustand. Die Städte müssen investieren, ___34___ die Sicherheit der Radfahrer zu garantieren.\n\n___35___ den Vorteilen des Radfahrens im Alltag gibt es Kritik. In Stoßzeiten sind oft keine Stellplätze an Bahnhöfen frei, ___36___ man das Rad dort abstellen will. Zudem sind die Radwege im Winter oft nicht geräumt.\n\nFür den Umweltschutz ist das Fahrrad besonders sinnvoll, ___37___ dadurch Autofahrten vermieden werden. Experten betonen, dass viele Menschen ___38___ Rad auch kürzere Strecken problemlos zu Fuß gehen könnten. Die Entwicklung bleibt also spannend, ___39___ immer mehr Menschen das Rad im Alltag für kurze Wege als echte Alternative ___40___ Auto ansehen.",
         items: [
-          { id: 31, correctAnswer: "B" }, { id: 32, correctAnswer: "H" }, { id: 33, correctAnswer: "E" }, { id: 34, correctAnswer: "O" }, { id: 35, correctAnswer: "E" },
-          { id: 36, correctAnswer: "L" }, { id: 37, correctAnswer: "L" }, { id: 38, correctAnswer: "N" }, { id: 39, correctAnswer: "A" }, { id: 40, correctAnswer: "J" }
+          { id: 31, correctAnswer: "A" }, { id: 32, correctAnswer: "B" }, { id: 33, correctAnswer: "C" }, { id: 34, correctAnswer: "D" }, { id: 35, correctAnswer: "E" },
+          { id: 36, correctAnswer: "F" }, { id: 37, correctAnswer: "G" }, { id: 38, correctAnswer: "H" }, { id: 39, correctAnswer: "I" }, { id: 40, correctAnswer: "J" }
         ]
       }
     ]
   }
 ];
-
