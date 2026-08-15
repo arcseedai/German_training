@@ -587,17 +587,25 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
     let correctCount = 0, answersCount = 0;
     flatQuestions.forEach(q => {
       const userAns = answers[q.displayId];
-      if (userAns !== undefined) {
+      if (userAns !== undefined && userAns !== "") {
         answersCount++;
-        if (userAns.toLowerCase() === q.correctAnswer.toLowerCase()) correctCount++;
+        if (userAns.toString().trim().toLowerCase() === q.correctAnswer.toString().trim().toLowerCase()) correctCount++;
       }
     });
     if (timeUp) alert(i18n.t("time_up"));
     
     onFinish({
-      timestamp: Date.now(),
-      variant: test.totalQuestions === 105 ? "Original" : test.totalQuestions === 60 ? "Reduced" : "Fast",
-      testSize: test.totalQuestions, answersCount, correctCount, totalQuestions: test.totalQuestions
+      session: {
+        timestamp: Date.now(),
+        variant: test.totalQuestions === 105 ? "Original" : test.totalQuestions === 60 ? "Reduced" : "Fast",
+        testSize: test.totalQuestions,
+        answersCount,
+        correctCount,
+        totalQuestions: test.totalQuestions
+      },
+      flatQuestions,
+      answers,
+      lockedQuestions
     });
   };
 

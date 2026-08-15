@@ -42,10 +42,12 @@
 
     } else if (totalQuestions === 60) {
       // REDUCED TEST: 20 Reading, 20 Language, 20 Listening (1 complete random Set)
-      const setIdx = Math.floor(Math.random() * window.readingQuestionsSets.length);
-      test.sections.Leseverstehen = clone(window.readingQuestionsSets[setIdx].parts);
-      test.sections.Sprachbausteine = clone(window.languageQuestionsSets[setIdx].parts);
-      test.sections.Hörverstehen = clone(window.listeningQuestionsSets[setIdx].parts);
+      const rIdx = Math.floor(Math.random() * window.readingQuestionsSets.length);
+      const laIdx = Math.floor(Math.random() * window.languageQuestionsSets.length);
+      const liIdx = Math.floor(Math.random() * window.listeningQuestionsSets.length);
+      test.sections.Leseverstehen = clone(window.readingQuestionsSets[rIdx].parts);
+      test.sections.Sprachbausteine = clone(window.languageQuestionsSets[laIdx].parts);
+      test.sections.Hörverstehen = clone(window.listeningQuestionsSets[liIdx].parts);
 
     } else {
       // ORIGINAL TEST: 35 Reading, 35 Language, 35 Listening

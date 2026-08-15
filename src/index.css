@@ -708,3 +708,19 @@ header {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
 }
+
+/* Review Screen Styles */
+.review-filter-btn {
+  color: var(--text-secondary);
+  background: transparent;
+  transition: var(--transition);
+}
+.review-filter-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+.review-filter-btn.active {
+  background: var(--primary) !important;
+  color: #fff !important;
+}
+

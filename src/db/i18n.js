@@ -66,7 +66,15 @@ window.i18n = {
       db_questions_count_label: "Fragen in der Datenbank",
       reading_pause: "Lesepause",
       audio_playing: "Audio wird abgespielt...",
-      audio_finished: "Audio beendet."
+      audio_finished: "Audio beendet.",
+      passed: "Bestanden",
+      failed: "Nicht Bestanden",
+      pass_message: "Herzlichen Glückwunsch! Sie haben das Prüfungsziel von mindestens 70% erreicht.",
+      fail_message: "Für das Bestehen sind mindestens 70% erforderlich.",
+      overview_title: "Fragen-Übersicht",
+      overview_subtitle: "Ergebnis jeder Frage nach Aufgabenkarten",
+      correct: "Richtig",
+      incorrect: "Falsch"
     },
     en: {
       title: "Telc B2 Trainer",
@@ -121,7 +129,15 @@ window.i18n = {
       db_questions_count_label: "questions in database",
       reading_pause: "Reading Pause",
       audio_playing: "Audio is playing...",
-      audio_finished: "Audio completed."
+      audio_finished: "Audio completed.",
+      passed: "Passed",
+      failed: "Not Passed",
+      pass_message: "Congratulations! You have reached the passing threshold of at least 70%.",
+      fail_message: "At least 70% is required to pass.",
+      overview_title: "Questions Overview",
+      overview_subtitle: "Result for each question card",
+      correct: "Correct",
+      incorrect: "Incorrect"
     }
   }
 };

@@ -38,11 +38,13 @@
     navigate("TEST");
   }
 
-  function handleFinishTest(testSession) {
-    appState.user.history.push(testSession);
+  function handleFinishTest(resultData) {
+    const session = resultData.session || resultData;
+    appState.user.history.push(session);
     saveUserState();
+    appState.lastTestResult = resultData;
     appState.activeTest = null;
-    navigate("DASHBOARD");
+    navigate("RESULTS");
   }
 
   function handleExport() {
@@ -95,6 +97,9 @@
         break;
       case "TEST":
         window.renderTestSimulator(mount, appState.activeTest, handleFinishTest, () => navigate("DASHBOARD"));
+        break;
+      case "RESULTS":
+        window.renderTestResults(mount, appState.lastTestResult, () => navigate("DASHBOARD"), (size) => handleStartTest(size));
         break;
     }
   }
