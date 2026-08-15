@@ -6,7 +6,7 @@ A fully responsive, offline-capable, interactive web application to practice for
 
 ## 🚀 Features
 
-* **480 Practice Questions** across Reading (*Leseverstehen*), Language (*Sprachbausteine*), and Listening (*Hörverstehen*).
+* **960 Practice Questions** across Reading (*Leseverstehen*), Language (*Sprachbausteine*), and Listening (*Hörverstehen*).
 * **3 Test Formats**:
   * **Fast Test:** 30 questions (randomized from all sections).
   * **Reduced Test:** 60 questions (1 complete randomized Set).
