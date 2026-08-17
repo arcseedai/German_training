@@ -106,7 +106,7 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
   };
 
   const renderLayout = () => {
-    let modeLabel = test.totalQuestions === 105 ? i18n.t("original_test") : test.totalQuestions === 60 ? i18n.t("reduced_test") : i18n.t("fast_test");
+    let modeLabel = test.totalQuestions >= 105 ? i18n.t("original_test") : test.totalQuestions === 60 ? i18n.t("reduced_test") : i18n.t("fast_test");
     
     mountPoint.innerHTML = `
       <header style="margin-bottom: 2rem;">
@@ -597,7 +597,7 @@ window.renderTestSimulator = function(mountPoint, test, onFinish, onCancel) {
     onFinish({
       session: {
         timestamp: Date.now(),
-        variant: test.totalQuestions === 105 ? "Original" : test.totalQuestions === 60 ? "Reduced" : "Fast",
+        variant: test.totalQuestions >= 105 ? "Original" : test.totalQuestions === 60 ? "Reduced" : "Fast",
         testSize: test.totalQuestions,
         answersCount,
         correctCount,

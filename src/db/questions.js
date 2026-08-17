@@ -16,7 +16,7 @@
   window.generateTest = function(totalQuestions) {
     const test = {
       totalQuestions,
-      timeLimitMinutes: totalQuestions === 105 ? 150 : totalQuestions === 60 ? 90 : 45,
+      timeLimitMinutes: totalQuestions === 120 ? 180 : totalQuestions === 60 ? 90 : 45,
       sections: {
         Leseverstehen: [],
         Sprachbausteine: [],
@@ -50,48 +50,48 @@
       test.sections.Hörverstehen = clone(window.listeningQuestionsSets[liIdx].parts);
 
     } else {
-      // ORIGINAL TEST: 35 Reading, 35 Language, 35 Listening
+      // FULL / MARATHON TEST: 120 Questions (2 Complete Sets: 40 Reading, 40 Language, 40 Listening)
       const readPart1_a = rSets[0].parts.find(p => p.part === "Teil 1");
       const readPart1_b = rSets[1].parts.find(p => p.part === "Teil 1");
       const readPart2_a = rSets[0].parts.find(p => p.part === "Teil 2");
+      const readPart2_b = rSets[1].parts.find(p => p.part === "Teil 2");
       const readPart3_a = rSets[0].parts.find(p => p.part === "Teil 3");
       const readPart3_b = rSets[1].parts.find(p => p.part === "Teil 3");
       
       test.sections.Leseverstehen = [
         { ...readPart1_a, part: "Teil 1 (Set A)" },
-        { ...readPart1_b, part: "Teil 1 (Set B)" },
-        { ...readPart2_a, part: "Teil 2" },
+        { ...readPart2_a, part: "Teil 2 (Set A)" },
         { ...readPart3_a, part: "Teil 3 (Set A)" },
+        { ...readPart1_b, part: "Teil 1 (Set B)" },
+        { ...readPart2_b, part: "Teil 2 (Set B)" },
         { ...readPart3_b, part: "Teil 3 (Set B)" }
       ];
 
-      const langBlock1 = laSets[0].parts[0];
-      const langBlock2 = laSets[0].parts[1];
-      const langBlock3 = laSets[1].parts[0];
-      const langBlock4Full = laSets[1].parts[1];
-      const langBlock4Partial = {
-        ...langBlock4Full,
-        items: langBlock4Full.items ? langBlock4Full.items.slice(0, 5) : []
-      };
+      const langBlock1_a = laSets[0].parts[0];
+      const langBlock2_a = laSets[0].parts[1];
+      const langBlock1_b = laSets[1].parts[0];
+      const langBlock2_b = laSets[1].parts[1];
 
       test.sections.Sprachbausteine = [
-        { ...langBlock1, part: "Teil 1 (Set A)" },
-        { ...langBlock2, part: "Teil 2 (Set A)" },
-        { ...langBlock3, part: "Teil 1 (Set B)" },
-        { ...langBlock4Partial, part: "Teil 2 (Set B)" }
+        { ...langBlock1_a, part: "Teil 1 (Set A)" },
+        { ...langBlock2_a, part: "Teil 2 (Set A)" },
+        { ...langBlock1_b, part: "Teil 1 (Set B)" },
+        { ...langBlock2_b, part: "Teil 2 (Set B)" }
       ];
 
       const listPart1_a = liSets[0].parts.find(p => p.part === "Teil 1");
       const listPart2_a = liSets[0].parts.find(p => p.part === "Teil 2");
-      const listPart2_b = liSets[1].parts.find(p => p.part === "Teil 2");
       const listPart3_a = liSets[0].parts.find(p => p.part === "Teil 3");
+      const listPart1_b = liSets[1].parts.find(p => p.part === "Teil 1");
+      const listPart2_b = liSets[1].parts.find(p => p.part === "Teil 2");
       const listPart3_b = liSets[1].parts.find(p => p.part === "Teil 3");
 
       test.sections.Hörverstehen = [
-        { ...listPart1_a, part: "Teil 1" },
+        { ...listPart1_a, part: "Teil 1 (Set A)" },
         { ...listPart2_a, part: "Teil 2 (Set A)" },
-        { ...listPart2_b, part: "Teil 2 (Set B)" },
         { ...listPart3_a, part: "Teil 3 (Set A)" },
+        { ...listPart1_b, part: "Teil 1 (Set B)" },
+        { ...listPart2_b, part: "Teil 2 (Set B)" },
         { ...listPart3_b, part: "Teil 3 (Set B)" }
       ];
     }

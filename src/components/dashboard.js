@@ -126,9 +126,9 @@ window.renderDashboard = function(mountPoint, userState, onStartTest, onLogout, 
 
             <div class="glass-card test-mode-card" style="background: rgba(15,23,42,0.3); padding: 1.5rem;">
               <h3>${i18n.t("original_test")}</h3>
-              <div class="meta">105 ${i18n.t("questions")} • 150 ${i18n.t("minutes")}</div>
+              <div class="meta">120 ${i18n.t("questions")} • 180 ${i18n.t("minutes")}</div>
               <p style="font-size: 0.825rem; margin-bottom: 1.5rem; color: var(--text-secondary);">${i18n.t("original_test_desc")}</p>
-              <button class="btn btn-primary start-test-btn" data-size="105" style="width: 100%;">${i18n.t("start_btn")}</button>
+              <button class="btn btn-primary start-test-btn" data-size="120" style="width: 100%;">${i18n.t("start_btn")}</button>
             </div>
           </div>
         </div>
